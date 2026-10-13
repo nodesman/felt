@@ -1,0 +1,14 @@
+build/
+bin/
+*.o
+*.a
+*.dylib
+*.app
+.DS_Store
+*.user
+*.user.*
+CMakeLists.txt.user
+.vscode/
+.idea/
+*.swp
+*~
