@@ -39,7 +39,10 @@ DocumentStats DocumentStats::compute(const QString &text) {
 }
 
 QString DocumentStats::formatReadingTime(int minutes) {
-    if (minutes <= 1) {
+    if (minutes <= 0) {
+        return QStringLiteral("0 min read");
+    }
+    if (minutes == 1) {
         return QStringLiteral("1 min read");
     }
     return QString::asprintf("%d min read", minutes);
@@ -47,13 +50,13 @@ QString DocumentStats::formatReadingTime(int minutes) {
 
 QString DocumentStats::formatSummary(const DocumentStats &stats) {
     if (stats.wordCount == 0) {
-        return QStringLiteral("0 words");
+        return QStringLiteral("0 words · 0 min read");
     }
 
     const QString wordUnit = (stats.wordCount == 1) ? QStringLiteral("word") : QStringLiteral("words");
     const QString timeStr = formatReadingTime(stats.readingTimeMinutes);
 
-    return QString::asprintf("%d %s  ·  %s",
+    return QString::asprintf("%d %s · %s",
                             stats.wordCount,
                             wordUnit.toUtf8().constData(),
                             timeStr.toUtf8().constData());

@@ -1,0 +1,26 @@
+version: '3'
+
+tasks:
+  configure:
+    desc: Configure CMake build directory
+    cmds:
+      - mkdir -p build
+      - cd build && cmake -DCMAKE_PREFIX_PATH="/Users/rajsekharan/Qt/6.5.3/macos" ..
+
+  build:
+    desc: Build Felt application and test suite
+    deps: [configure]
+    cmds:
+      - cmake --build build --parallel
+
+  test:
+    desc: Run William Zinsser test suite
+    deps: [build]
+    cmds:
+      - ctest --test-dir build --output-on-failure
+
+  run:
+    desc: Launch Felt application
+    deps: [build]
+    cmds:
+      - open build/Felt.app
