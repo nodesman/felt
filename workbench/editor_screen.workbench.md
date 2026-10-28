@@ -60,14 +60,14 @@ themes:
       bg_vignette_center: "#0D0F14"
       background: "#08090C"
       text_main: "#ECEBE8"
-      text_dimmed: "#464B53"
+      text_dimmed: "#4C525B"
       selection_bg: "#1E3A8A"
       selection_text: "#FFFFFF"
       caret_color: "#5E81AC"
       accent: "#5E81AC"
       markdown_prefix: "#4B5563"
       hud_text: "#6B7280"
-      description: "Default dark canvas. Deep obsidian radial vignette (#0D0F14 center tapering to #08090C outer edges) with optical bone white prose (#ECEBE8), WCAG-verified slate smoke focus dimming (#464B53, 2.15:1 contrast against #0D0F14 center and 2.29:1 against #08090C outer), and Nordic frost accent (#5E81AC)."
+      description: "Default dark canvas. Deep obsidian radial vignette (#0D0F14 center tapering to #08090C outer edges) with optical bone white prose (#ECEBE8), WCAG-verified slate smoke focus dimming (#4C525B, 2.43:1 contrast against #0D0F14 center), and Nordic frost accent (#5E81AC)."
 
     warm_parchment:
       name: "Warm Parchment"

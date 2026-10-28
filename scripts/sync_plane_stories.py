@@ -33,10 +33,11 @@ describe("FeltEditor list continuation and indentation", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] Zero default grey OS title bar band; traffic lights flush inside top canvas margin (human visual/screenshot check).
-- [ ] All 8 `it()` scenarios in `describe("FeltEditor list continuation and indentation")` pass via `FeltAppDriver` keystroke simulation.
-- [ ] Zero `else` keywords, <= 200 lines per file."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Early-Return-Safe `beginEditBlock`)**: Read `FeltEditor::keyPressEvent` in `editor.cpp` and verify that every execution path after `cursor.beginEditBlock()` is guaranteed to reach `cursor.endEditBlock()` (or uses an RAII scope guard) so an early return never leaves the `QTextDocument` undo stack wedged open.
+- [ ] **LLM Semantic Check 2 (Cocoa Hit-Testing vs. Viewport Selection)**: Read `windowchrome.mm` and `editor.cpp` to verify top-margin window dragging does not swallow mouse clicks inside the editor viewport or reintroduce recursive `sendEvent` forwarding.
+- [ ] **LLM Multimodal Visual Check**: Inspect a live screenshot of `Felt.app` on macOS to confirm traffic lights sit at `(18, 18)` against a unified canvas with zero grey title-bar band.
+- [ ] All 8 `it()` scenarios pass via `FeltAppDriver` keystroke simulation; zero `else` keywords, <= 200 lines per file."""
     },
     {
         'id': '410d443e-2506-4628-b732-382eb3da52fe',
@@ -45,7 +46,7 @@ describe("FeltEditor list continuation and indentation", [] {
 - **Ambient Tactile Sheen**:
   - Replace flat `#080808` fill with a radial vignette (`bgVignetteCenter` `#0D0F14` tapering to `bgOuter` `#08090C`) eliminating the raw `<textarea>` look.
   - Enforce 160% proportional line height (`QTextBlockFormat::ProportionalHeight`) across all initial, newly inserted, and pasted text blocks.
-  - Apply `ThemeRegistry::obsidianVoid().textMain` (`#ECEBE8`) body typography and `ThemeRegistry::obsidianVoid().textDimmed` (`#464B53`, WCAG 2.15:1 against `#0D0F14`) focus dimming without flipping `document()->isModified()`.
+  - Apply `ThemeRegistry::obsidianVoid().textMain` (`#ECEBE8`) body typography and `ThemeRegistry::obsidianVoid().textDimmed` (`#4C525B`, WCAG 2.43:1 against `#0D0F14`) focus dimming without flipping `document()->isModified()`.
   - **Explicit v1 Scope Boundary**: Focus Mode illuminates the active `QTextBlock` (soft-wrapped within the `66ch` measure via `QPlainTextEdit::WidgetWidth`); multi-line hard-wrapped blocks are separate paragraphs.
 - **Live Theme Application**:
   - Dynamically apply any of the 4 `ThemePalette` configurations (*Obsidian Void*, *Warm Parchment*, *Slate Concrete*, *Midnight Indigo*) to `FeltEditor`, `FeltHighlighter`, caret, and `DocumentHUD` without widget reconstruction.
@@ -63,10 +64,10 @@ describe("Canvas Tactile Aesthetics and Live Theming", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] Radial vignette and 160% proportional line spacing verified in live window and unit assertions.
-- [ ] All assertions reference `ThemeRegistry` palette properties (zero duplicate hardcoded hex literals).
-- [ ] Toggling Focus Mode (`Cmd+D`) or switching themes on an unmodified document never marks `isModified()` true.
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Zero `Cmd+Z` Undo-Stack Pollution During Visual Dimming)**: Read `FeltEditor::updateFocusMode()` and theme-switching code in `editor.cpp` to verify that applying dimmed/active block formats does **not** record format-change entries onto the user's `QTextDocument` undo stack (`setModified(false)` alone is insufficient if `Cmd+Z` undoes Focus Mode colors instead of user text).
+- [ ] **LLM Semantic Check 2 (True Radial Vignette Painting)**: Verify viewport background paints a `QRadialGradient` from `palette.bgVignetteCenter` (`#0D0F14`) to `palette.bgOuter` (`#08090C`), not a flat CSS fill.
+- [ ] **LLM Semantic Check 3 (Zero Stray Color Values)**: Verify every color in `editor.cpp`, `highlighter.cpp`, and `documenthud.cpp` is read dynamically from the active `ThemePalette`.
 - [ ] All 7 `it()` blocks pass."""
     },
     {
@@ -93,10 +94,11 @@ describe("Minimalist Preferences Sheet (Cmd+,)", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] File length <= 180 lines, zero `else` keywords.
-- [ ] All 7 `it()` blocks pass under `FeltAppDriver` interaction.
-- [ ] Visual layout matches `_meta/mockups/preferences_settings_modal.jpg`."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Loop-Free Two-Way UI Sync via `QSignalBlocker`)**: Read `settingssheet.cpp` to verify that syncing controls with live keyboard-toggled states (`Cmd+D` Focus Mode, `Cmd+T` Typewriter Mode) uses `QSignalBlocker` so opening the dialog does not re-emit change signals in a feedback loop.
+- [ ] **LLM Semantic Check 2 (Single-Instance Modal Lifecycle)**: Verify pressing `Cmd+,` repeatedly raises/reuses the existing `SettingsSheet` instance cleanly without leaking `QDialog` pointers.
+- [ ] **LLM Multimodal Visual Check**: Compare live screenshot of `Cmd+,` sheet against `_meta/mockups/preferences_settings_modal.jpg`.
+- [ ] File length <= 180 lines, zero `else` keywords, all 7 `it()` blocks pass."""
     },
     {
         'id': '347ebe23-181e-4cb9-9000-78fd7e921b7d',
@@ -116,9 +118,10 @@ describe("Preferences State Machine and Storage Persistence", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] 100.0% branch coverage on `preferences.cpp` via `xcrun llvm-cov`.
-- [ ] All 5 `it()` blocks pass."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Domain Ownership of Clamping & Fallbacks)**: Read `preferences.h/cpp` and `mainwindow.cpp` to verify all clamping rules (`13–26pt` font size, `520–960px` column width) and corrupt-key fallbacks live inside the `Preferences` domain class, not scattered across UI sliders.
+- [ ] **LLM Semantic Check 2 (No Layout Thrashing on Slider Drag)**: Verify moving the column-width slider recalculates viewport margins directly without reconstructing `FeltHighlighter` or reloading fonts on every pixel tick.
+- [ ] 100.0% branch coverage on `preferences.cpp` via `xcrun llvm-cov`; all 5 `it()` blocks pass."""
     },
     {
         'id': 'ad498b62-2f6d-4693-8465-82ff26a802aa',
@@ -141,8 +144,9 @@ describe("FeltAppDriver end-to-end writing journeys", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] Drives the real `MainWindow` widget hierarchy with real Qt mouse, keyboard, and file I/O events.
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Genuine User-Input Simulation vs. Backdoor Calls)**: Read `tests/felt_app_driver.h` and verify driver actions dispatch real Qt key, mouse, and QAction events through the widget hierarchy rather than calling internal helper functions directly.
+- [ ] **LLM Semantic Check 2 (Full-State Journey Assertions)**: Verify each of the 8 E2E journeys asserts the complete observable user outcome (editor text, block/char formatting, HUD string, dirty flag, and saved disk contents).
 - [ ] Zero `|| true` tautologies; all 8 end-to-end journeys pass 100%."""
     },
     {
@@ -163,9 +167,10 @@ describe("Markdown Block Grammar Lexer", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] 100.0% branch coverage on `grammar.cpp` via `xcrun llvm-cov`.
-- [ ] Zero GUI includes, zero `else` keywords, <= 90 lines."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Zero-Allocation `QStringView` Linear Scan)**: Read `grammar.h/cpp` to verify block lexing scans `QStringView` directly in $O(N)$ linear time—zero `QRegularExpression` instantiations per call and zero heap-allocated `QString` substring copies.
+- [ ] **LLM Semantic Check 2 (Pure Domain Isolation)**: Verify `grammar.h/cpp` has zero GUI/widget dependencies and returns pure value structs (`BlockToken`, `InlineSpan`).
+- [ ] 100.0% branch coverage on `grammar.cpp` via `xcrun llvm-cov`; zero `else` keywords, <= 90 lines."""
     },
     {
         'id': 'b5eeb9a3-483f-436f-a257-b45412351369',
@@ -187,8 +192,9 @@ describe("Markdown Inline Emphasis Delimiter Lexer", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] All 8 `it()` blocks pass with concrete span offset assertions.
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Exact Span Offset & Length Assertions)**: Read `tests/test_grammar_conformance.cpp` to verify every `it()` block asserts the **exact start index, length, and token type** of both the opening/closing delimiter (`*`, `**`) and inner content—never a weak check like `!spans.isEmpty()`.
+- [ ] **LLM Semantic Check 2 (No Quadratic Backtracking on Unclosed/Escaped Asterisks)**: Verify in `grammar.cpp` that scanning a line with multiple unclosed `*` or escaped `\\*` characters runs in a single linear pass without nested backtracking loops.
 - [ ] 100.0% branch coverage on inline delimiter scanning."""
     },
     {
@@ -198,7 +204,7 @@ describe("Markdown Inline Emphasis Delimiter Lexer", [] {
 - **Code**: Create `theme.h/cpp` and `themeregistry.h/cpp` (<= 100 lines each, zero `else`, immutable value objects) for *Obsidian Void*, *Warm Parchment*, *Slate Concrete*, and *Midnight Indigo*.
 - **Single Source of Truth & WCAG Math**:
   - `ThemeRegistry` is the sole authority for hex color literals in the codebase. All tests outside `ThemeRegistry` read colors from the registry.
-  - Raise *Obsidian Void* `textDimmed` from `#3E4249` (1.897:1) to `#464B53` (2.15:1 against `#0D0F14` center, 2.29:1 against `#08090C` outer).
+  - Set *Obsidian Void* `textDimmed` to `#4C525B` (**`2.43:1`** against `#0D0F14` vignette center, providing comfortable headroom above the `2.0:1` floor).
   - Measure all WCAG contrast ratios against `bgVignetteCenter`.
 
 ## Zinsser Core Spec (5 `it()` Scenarios)
@@ -212,9 +218,10 @@ describe("ThemeRegistry and WCAG Contrast Invariants", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] 100.0% branch coverage on `theme.cpp` and `themeregistry.cpp` via `xcrun llvm-cov`.
-- [ ] Zero `else` keywords, <= 100 lines per file."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Exact WCAG 2.1 Relative Luminance Formula)**: Read `theme.cpp` to verify the contrast calculation implements the true WCAG 2.1 piecewise sRGB transfer function (`0.04045` linear threshold and `2.4` gamma exponent) measured against `bgVignetteCenter`, rather than a simplified perceived-brightness shortcut.
+- [ ] **LLM Semantic Check 2 (True Value-Object Immutability & `#4C525B` Headroom)**: Verify `ThemePalette` cannot be mutated after construction and that Obsidian Void `textDimmed` (`#4C525B`) provides `2.43:1` contrast headroom against `#0D0F14`.
+- [ ] 100.0% branch coverage on `theme.cpp` and `themeregistry.cpp` via `xcrun llvm-cov`; zero `else` keywords, <= 100 lines per file."""
     },
     {
         'id': '06c049ae-f813-4846-8c46-5cd26db30b2a',
@@ -233,9 +240,9 @@ describe("Document Measure and Viewport Margin Calculus", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] 100.0% branch coverage on `measure.cpp` via `xcrun llvm-cov`.
-- [ ] Zero GUI includes, zero `else` keywords."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Tell, Don't Ask Delegation)**: Read `measure.h/cpp` and `editor.cpp` to verify `FeltEditor::updateMargins()` delegates 100% of margin and column-width clamping math to `DocumentMeasure` (zero raw geometry arithmetic left inside `editor.cpp`).
+- [ ] 100.0% branch coverage on `measure.cpp` via `xcrun llvm-cov`; zero GUI includes, zero `else` keywords."""
     },
     {
         'id': '3847e032-6622-48a2-b793-a8dccabe2ee3',
@@ -265,9 +272,10 @@ describe("Declarative Menu Actions and Font Priority Resolution", [] {
 });
 ```
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] Every `.h` and `.cpp` file in the repository is strictly <= 200 lines.
-- [ ] Zero `else` keywords exist anywhere in the codebase."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Genuine Guard Clauses vs. Disguised `else`)**: Read `editor.cpp` and `mainwindow.cpp` to verify that removing the 10 `else` branches used genuine early returns and data-driven iteration (the font priority list), not nested ternaries (`a ? (b ? c : d) : e`) or inverted `if (!cond)` blocks following a non-returning `if (cond)`.
+- [ ] **LLM Semantic Check 2 (Cohesive Single-Responsibility Extraction)**: Verify `DocumentHUD` and `MenuBuilder` are clean, cohesive components with <= 2 instance variables, not arbitrary slices of `MainWindow` created just to pass the 200-line limit.
+- [ ] Every `.h` and `.cpp` file in the repository is strictly <= 200 lines; zero `else` keywords exist anywhere in the codebase."""
     },
     {
         'id': 'd8ba3870-6df4-4c42-abab-f025bfa095bc',
@@ -279,8 +287,8 @@ describe("Declarative Menu Actions and Font Priority Resolution", [] {
   3. William Zinsser Mandate: Zero bureaucratic filler words (`should`, `properly`, `correctly`, `successfully`, `works as expected`) and zero tautologies (`|| true`).
   4. Multi-Scenario & Auditor Rule: Every `describe()` block contains >= 4 unique `it()` blocks, and every `it()` block tests a single distinct failure mode that would exist even without a minimum count rule (zero artificial padding).
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] `task gate` exits non-zero on any file > 200 lines, any `else`, any tautology, or any `describe()` with < 4 unique `it()` blocks."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check (Mandatory Pre-Done Audit)**: Verify that no story is marked `Done` until both the automated `task gate` script exits `0` **and** an LLM Auditor has verified the story-specific semantic checks on the git diff."""
     },
     {
         'id': 'b7723a4d-0320-4fe5-935d-5ae4694cddad',
@@ -291,9 +299,11 @@ describe("Declarative Menu Actions and Font Priority Resolution", [] {
   - Enable `-fprofile-instr-generate -fcoverage-mapping` in `CMakeLists.txt` and enforce 100% branch coverage on pure domain modules (`stats`, `grammar`, `theme`, `themeregistry`, `measure`, `preferences`).
   - Refactor existing `tests/test_felt.cpp` to eliminate `|| true` (using real offscreen window activation) and replace hardcoded `#F0F0F0` / `#383838` strings with `ThemeRegistry::obsidianVoid()` references.
 
-## The Brake Check (LLM Auditor Verification Gate)
-- [ ] Zero `|| true` tautologies and zero duplicate hardcoded palette hex literals in `tests/test_felt.cpp`.
-- [ ] 100.0% branch coverage on core domain modules via `xcrun llvm-cov`."""
+## The Brake Check (Context-Specific LLM Auditor Verification Gate)
+- [ ] **LLM Semantic Check 1 (Assertion Strength & Honesty Audit Across All 63 `it()` Blocks)**: Read every `it()` block body across the test suite and verify that:
+  1. Every `it()` body asserts the exact behavioral claim in its title (`QCOMPARE` on exact strings, coordinates, and `ThemePalette` colors—zero weak truthy checks).
+  2. Every `it()` tests a distinct failure mode that would deserve to exist even without the `>= 4` rule (zero padding).
+  3. All legacy tests in `tests/test_felt.cpp` use `ThemeRegistry` colors and real offscreen focus activation (`show()`, `activateWindow()`, `qWaitForWindowActive()`)."""
     }
 ]
 
