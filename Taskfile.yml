@@ -29,3 +29,9 @@ tasks:
     desc: Compile screen prompt pipeline into workbench files
     cmds:
       - python3 scripts/compile_workbench.py -v
+
+  gate:
+    desc: Audit Object Calisthenics, Zinsser prose, and run test suite
+    cmds:
+      - python3 scripts/verify_conformance.py
+      - ctest --test-dir build --output-on-failure
