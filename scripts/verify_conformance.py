@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-verify_conformance.py - Sovereign Conformance & Object Calisthenics Gate for Felt
+verify_conformance.py - Conformance & Object Calisthenics Gate for Felt
 
 Audits the C++ codebase against:
 1. Object Calisthenics Rule 7: Small entities (<= 200 lines per file)
 2. Object Calisthenics Rule 2: Zero 'else' keywords
 3. William Zinsser Mandate: Zero bureaucratic words or tautologies in test suites
-4. Multi-Scenario Describe Rule: Every describe() block must contain >= 4 it() blocks
+4. Multi-Scenario Describe & Auditor Rule:
+   - Every describe() block must contain >= 4 unique it() blocks.
+   - Auditor Rule: Every it() block must test a single distinct failure mode that
+     would exist even without a minimum count rule (zero artificial padding).
 """
 
 import sys

@@ -50,19 +50,24 @@ canvas_layout:
 
 themes:
   default_theme: "obsidian_void"
+  single_source_of_truth: "ThemeRegistry (theme.h / themeregistry.h)"
+  wcag_contrast_reference: "bg_vignette_center"
   palettes:
     obsidian_void:
       name: "Obsidian Void"
       type: "dark"
-      background: "#080808"
-      text_main: "#F0F0F0"
-      text_dimmed: "#383838"
+      bg_outer: "#08090C"
+      bg_vignette_center: "#0D0F14"
+      background: "#08090C"
+      text_main: "#ECEBE8"
+      text_dimmed: "#464B53"
       selection_bg: "#1E3A8A"
       selection_text: "#FFFFFF"
-      caret_color: "#3B82F6"
+      caret_color: "#5E81AC"
+      accent: "#5E81AC"
       markdown_prefix: "#4B5563"
       hud_text: "#6B7280"
-      description: "Default sovereign dark canvas. Pure deep obsidian with high-acuity bone white prose and electric cyan pulse."
+      description: "Default dark canvas. Deep obsidian radial vignette (#0D0F14 center tapering to #08090C outer edges) with optical bone white prose (#ECEBE8), WCAG-verified slate smoke focus dimming (#464B53, 2.15:1 contrast against #0D0F14 center and 2.29:1 against #08090C outer), and Nordic frost accent (#5E81AC)."
 
     warm_parchment:
       name: "Warm Parchment"
@@ -130,7 +135,7 @@ modes:
 </screen_data>
 
 ## Role & Goal Definitions
-You are the **Lead C++ / Qt 6 Systems Engineer & Sovereign Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
+You are the **Lead C++ / Qt 6 Systems Engineer & Principal Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
 Your goal is to implement, refine, and verify the screen component described in `<screen_data>` according to the highest visual and architectural standards.
 
 ## Execution Constraints

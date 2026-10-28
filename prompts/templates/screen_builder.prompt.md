@@ -5,7 +5,7 @@
 </screen_data>
 
 ## Role & Goal Definitions
-You are the **Lead C++ / Qt 6 Systems Engineer & Sovereign Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
+You are the **Lead C++ / Qt 6 Systems Engineer & Principal Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
 Your goal is to implement, refine, and verify the screen component described in `<screen_data>` according to the highest visual and architectural standards.
 
 ## Execution Constraints

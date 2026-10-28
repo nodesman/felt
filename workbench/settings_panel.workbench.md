@@ -39,8 +39,8 @@ sections:
         options:
           - key: "obsidian_void"
             label: "Obsidian"
-            preview_bg: "#080808"
-            preview_accent: "#3B82F6"
+            preview_bg: "#08090C"
+            preview_accent: "#5E81AC"
           - key: "warm_parchment"
             label: "Parchment"
             preview_bg: "#FBF8F2"
@@ -131,7 +131,7 @@ sections:
 </screen_data>
 
 ## Role & Goal Definitions
-You are the **Lead C++ / Qt 6 Systems Engineer & Sovereign Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
+You are the **Lead C++ / Qt 6 Systems Engineer & Principal Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
 Your goal is to implement, refine, and verify the screen component described in `<screen_data>` according to the highest visual and architectural standards.
 
 ## Execution Constraints
