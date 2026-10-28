@@ -9,6 +9,7 @@
 #include <QTextLayout>
 
 void runCoreArchitectureSuites();
+void runUiAndPreferencesSuites();
 
 class TestFelt : public QObject {
     Q_OBJECT
@@ -18,6 +19,7 @@ private slots:
     void verifies_document_stats_and_hud_formatting();
     void verifies_highlighter_and_focus_mode_invariants();
     void verifies_core_architecture_and_measure() { runCoreArchitectureSuites(); }
+    void verifies_ui_and_preferences() { runUiAndPreferencesSuites(); }
 };
 
 void TestFelt::verifies_theme_registry_and_contrast_invariants() {
@@ -158,7 +160,6 @@ void TestFelt::verifies_highlighter_and_focus_mode_invariants() {
             FeltHighlighter highlighter(&doc);
             highlighter.setFocusMode(true);
             highlighter.setCurrentBlockNumber(2);
-
             const auto formats2 = doc.findBlockByNumber(2).layout()->formats();
             QVERIFY(!formats2.isEmpty());
             QCOMPARE(formats2.first().format.foreground().color(), ThemeRegistry::obsidianVoid().textMain());
@@ -169,7 +170,6 @@ void TestFelt::verifies_highlighter_and_focus_mode_invariants() {
             doc.setPlainText(QStringLiteral("Unmodified manuscript paragraph.\n\nSecond paragraph."));
             FeltHighlighter highlighter(&doc);
             doc.setModified(false);
-
             highlighter.setFocusMode(true);
             QVERIFY(!doc.isModified());
             highlighter.setCurrentBlockNumber(2);
@@ -186,7 +186,6 @@ void TestFelt::verifies_highlighter_and_focus_mode_invariants() {
             editor.show();
             editor.activateWindow();
             QVERIFY(QTest::qWaitForWindowActive(&editor));
-
             QTest::mouseClick(editor.viewport(), Qt::LeftButton, Qt::NoModifier, QPoint(50, 50));
             QVERIFY(editor.hasFocus());
             QTest::mouseClick(&editor, Qt::LeftButton, Qt::NoModifier, QPoint(10, 10));
@@ -194,6 +193,5 @@ void TestFelt::verifies_highlighter_and_focus_mode_invariants() {
         });
     });
 }
-
 QTEST_MAIN(TestFelt)
 #include "test_felt.moc"

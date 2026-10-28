@@ -24,7 +24,7 @@ tasks:
     desc: Display 100% LLVM branch and line coverage report for core domain modules
     deps: [test]
     cmds:
-      - xcrun llvm-cov report ./build/test_felt -instr-profile=build/test_felt.profdata theme.cpp themeregistry.cpp stats.cpp measure.cpp
+      - xcrun llvm-cov report ./build/test_felt -instr-profile=build/test_felt.profdata theme.cpp themeregistry.cpp stats.cpp measure.cpp preferences.cpp
 
   run:
     desc: Launch Felt application

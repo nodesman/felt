@@ -105,6 +105,19 @@ describe("FeltAppDriver end-to-end writing journeys", [] {
   - [ ] **LLM Semantic Check 1 (Genuine User-Input Simulation vs. Backdoor Calls)**: Read `tests/felt_app_driver.h` and verify driver actions dispatch real Qt key, mouse, and QAction events through the widget hierarchy rather than calling internal helper methods directly.
   - [ ] **LLM Semantic Check 2 (Full-State Journey Assertions)**: Verify each of the 8 E2E journeys asserts the complete observable user outcome (editor text, block/char formatting, HUD string, dirty flag, and saved disk contents).
 
+### Story 5b: `[FELT-UI-6]` Mount Invisible Top Titlebar Drag Strip & Restore High-Contrast Selection Highlight
+```cpp
+describe("Frameless Titlebar Drag Strip and Selection Highlight", [] {
+    it("mounts a thirty-six pixel invisible drag strip across the top titlebar zone");
+    it("moves the main window position when dragging across the top titlebar strip");
+    it("restores solid canvas background and high-contrast selection highlight on editor");
+    it("preserves text cursor selection below the drag strip without moving the window");
+});
+```
+- **Context-Specific LLM Auditor Gate**:
+  - [ ] **LLM Semantic Check 1 (Top `0..36px` Drag Strip Separation)**: Read `titlebardragstrip.h/cpp` and `mainwindow.cpp` to verify a dedicated `36px`-high `TitleBarDragStrip` sits at the top of `MainWindow`'s vertical layout (`y = 0..36`, above `FeltEditor`) so clicking and dragging in the top 10–36px titlebar zone moves the window cleanly without `FeltEditor` intercepting mouse presses.
+  - [ ] **LLM Semantic Check 2 (Solid Canvas & Selection Highlight Integrity)**: Read `editor.cpp` to verify `FeltEditor` uses a solid `background-color` and `selection-background-color` (`#1E3A8A` on Obsidian Void) rather than `background: transparent` (which suppresses Qt's `QStyleSheetStyle` selection fill).
+
 ---
 
 ## Epic 2: Compiler-Grade Lexical Grammar & In-Situ Conformance

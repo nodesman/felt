@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(Felt VERSION 1.0.0 LANGUAGES CXX)
+project(Felt VERSION 1.0.0 LANGUAGES CXX OBJCXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_OBJCXX_STANDARD 17)
 
 option(ENABLE_COVERAGE "Enable LLVM source-based code coverage instrumentation" ON)
 
@@ -24,6 +25,8 @@ set(FELT_DOMAIN_SOURCES
     stats.cpp
     measure.h
     measure.cpp
+    preferences.h
+    preferences.cpp
 )
 
 set(FELT_CORE_SOURCES
@@ -36,6 +39,12 @@ set(FELT_CORE_SOURCES
     documenthud.cpp
     menubuilder.h
     menubuilder.cpp
+    settingssheet.h
+    settingssheet.cpp
+    titlebardragstrip.h
+    titlebardragstrip.cpp
+    windowchrome.h
+    windowchrome.mm
     mainwindow.h
     mainwindow.cpp
 )
@@ -59,20 +68,25 @@ if(APPLE)
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
         MACOSX_BUNDLE_ICON_FILE "Felt.icns"
     )
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets "-framework AppKit")
 else()
     add_executable(${PROJECT_NAME} main.cpp ${FELT_CORE_SOURCES} resources/felt.qrc)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 endif()
-
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 
 # Unit test binary
 add_executable(test_felt
     tests/zinsser.h
     tests/test_felt.cpp
     tests/test_core_architecture.cpp
+    tests/test_ui_and_preferences.cpp
     ${FELT_CORE_SOURCES}
 )
-target_link_libraries(test_felt PRIVATE Qt6::Widgets Qt6::Test)
+if(APPLE)
+    target_link_libraries(test_felt PRIVATE Qt6::Widgets Qt6::Test "-framework AppKit")
+else()
+    target_link_libraries(test_felt PRIVATE Qt6::Widgets Qt6::Test)
+endif()
 
 if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(test_felt PRIVATE -fprofile-instr-generate -fcoverage-mapping -O0 -g)

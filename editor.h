@@ -15,8 +15,10 @@ public:
     void applyTheme(const ThemePalette &palette);
     ThemePalette currentTheme() const;
 
+    void setTypography(const QString &family, int pointSize);
     void setColumnWidth(int width);
     int maxColumnWidth() const { return m_measure.columnWidth(); }
+    void setCaretWidth(int pixels);
 
     void setFocusMode(bool enabled);
     bool isFocusMode() const;
@@ -47,9 +49,12 @@ private slots:
 
 private:
     void updateMargins();
-    void setupTypography();
+    void applyLineSpacingToAllBlocks();
+    bool handleListReturnKey();
+    bool handleTabKey(bool unindent);
 
     FeltHighlighter *m_highlighter = nullptr;
     DocumentMeasure m_measure;
     bool m_typewriterMode = true;
+    bool m_applyingLineSpacing = false;
 };

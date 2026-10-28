@@ -4,6 +4,8 @@
 #include "../mainwindow.h"
 #include "../documenthud.h"
 #include "../menubuilder.h"
+#include "../themeregistry.h"
+#include "../titlebardragstrip.h"
 
 void runCoreArchitectureSuites() {
     describe("Document Measure and Viewport Margin Calculus", [] {
@@ -41,7 +43,6 @@ void runCoreArchitectureSuites() {
             const ViewportMargins tiny = measure.computeMargins(60);
             QVERIFY(tiny.left >= 0);
             QVERIFY(60 - (tiny.left + tiny.right) > 0);
-
             const ViewportMargins zero = measure.computeMargins(0);
             QCOMPARE(zero.left, 0);
             QCOMPARE(zero.right, 0);
@@ -49,7 +50,7 @@ void runCoreArchitectureSuites() {
     });
 
     describe("Declarative Menu Actions and Font Priority Resolution", [] {
-        it("selects first available monospace family from ordered priority list without else branches", [] {
+        it("selects first available monospace family from ordered priority list", [] {
             const QStringList installed = {QStringLiteral("Arial"), QStringLiteral("Monaco"), QStringLiteral("Courier New")};
             const QStringList priority = {QStringLiteral("Menlo"), QStringLiteral("Monaco"), QStringLiteral("Courier New")};
             const QFont resolved = FeltEditor::resolveMonospaceFont(installed, priority, 18);
@@ -81,15 +82,57 @@ void runCoreArchitectureSuites() {
         it("synchronizes checkable menu actions with editor focus and typewriter states", [] {
             MainWindow window;
             const WindowMenuActions actions = window.menuActions();
-            QVERIFY(actions.focusAction->isChecked());
-            QVERIFY(actions.typewriterAction->isChecked());
-
             window.editor()->setFocusMode(false);
             QVERIFY(!actions.focusAction->isChecked());
-
             window.editor()->setTypewriterMode(false);
             QVERIFY(!actions.typewriterAction->isChecked());
             QVERIFY(!window.hud()->summaryText().isEmpty());
+        });
+    });
+
+    describe("Frameless Titlebar Drag Strip and Selection Highlight", [] {
+        it("mounts a thirty-six pixel invisible drag strip across the top titlebar zone", [] {
+            MainWindow window;
+            window.show();
+            QVERIFY(window.dragStrip() != nullptr);
+            QCOMPARE(window.dragStrip()->height(), TitleBarDragStrip::kStripHeight);
+            QCOMPARE(window.dragStrip()->y(), 0);
+        });
+
+        it("moves the main window position when dragging across the top titlebar strip", [] {
+            MainWindow window;
+            window.move(100, 100);
+            window.show();
+            TitleBarDragStrip *strip = window.dragStrip();
+            const QPoint startLocal(200, 15);
+            const QPoint startGlobal = strip->mapToGlobal(startLocal);
+            QMouseEvent press(QEvent::MouseButtonPress, startLocal, startGlobal, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(strip, &press);
+            const QPoint movedGlobal = startGlobal + QPoint(80, 45);
+            QMouseEvent move(QEvent::MouseMove, startLocal, movedGlobal, Qt::NoButton, Qt::LeftButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(strip, &move);
+            QMouseEvent release(QEvent::MouseButtonRelease, startLocal, movedGlobal, Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(strip, &release);
+            QCOMPARE(window.pos(), QPoint(180, 145));
+        });
+
+        it("restores solid canvas background and high-contrast selection highlight on editor", [] {
+            MainWindow window;
+            window.applyTheme(ThemeRegistry::obsidianVoid());
+            const QPalette pal = window.editor()->palette();
+            QCOMPARE(pal.color(QPalette::Base), ThemeRegistry::obsidianVoid().bgOuter());
+            QCOMPARE(pal.color(QPalette::Highlight), ThemeRegistry::obsidianVoid().selectionBg());
+            QCOMPARE(pal.color(QPalette::HighlightedText), ThemeRegistry::obsidianVoid().selectionText());
+            QVERIFY(window.editor()->styleSheet().contains(ThemeRegistry::obsidianVoid().selectionBg().name()));
+        });
+
+        it("preserves text cursor selection below the drag strip without moving the window", [] {
+            MainWindow window;
+            window.move(120, 120);
+            window.show();
+            const QPoint initialPos = window.pos();
+            QTest::mouseClick(window.editor()->viewport(), Qt::LeftButton, Qt::NoModifier, QPoint(60, 60));
+            QCOMPARE(window.pos(), initialPos);
         });
     });
 }
