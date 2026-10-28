@@ -24,3 +24,8 @@ tasks:
     deps: [build]
     cmds:
       - open build/Felt.app
+
+  workbench:
+    desc: Compile screen prompt pipeline into workbench files
+    cmds:
+      - python3 scripts/compile_workbench.py -v

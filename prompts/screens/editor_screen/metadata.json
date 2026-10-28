@@ -1,0 +1,8 @@
+{
+  "screen_id": "editor_screen",
+  "screen_title": "Felt Main Editor Screen (Unified Frameless Window & Dynamic Themes)",
+  "version": "1.1.0",
+  "status": "active",
+  "target_platforms": ["macOS", "Linux", "Windows"],
+  "author": "Helm Sovereign Workbench"
+}

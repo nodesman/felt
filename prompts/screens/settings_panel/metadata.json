@@ -1,0 +1,9 @@
+{
+  "screen_id": "settings_panel",
+  "screen_title": "Felt Minimal Preferences & Settings Panel (iA Writer Style)",
+  "version": "1.0.0",
+  "status": "active",
+  "shortcut": "Cmd+,",
+  "target_platforms": ["macOS", "Linux", "Windows"],
+  "author": "Helm Sovereign Workbench"
+}

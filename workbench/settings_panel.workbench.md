@@ -1,0 +1,150 @@
+# Screen Builder & Architectural Prompt: Felt Minimal Preferences & Settings Panel (iA Writer Style)
+
+<screen_data>
+# Screen Metadata
+{
+  "screen_id": "settings_panel",
+  "screen_title": "Felt Minimal Preferences & Settings Panel (iA Writer Style)",
+  "version": "1.0.0",
+  "status": "active",
+  "shortcut": "Cmd+,",
+  "target_platforms": [
+    "macOS",
+    "Linux",
+    "Windows"
+  ],
+  "author": "Helm Sovereign Workbench"
+}
+
+# Structured Screen Data (YAML) - settings_panel
+screen_name: "settings_panel"
+title: "Felt Preferences & Settings Panel"
+design_archetype: "iA_Writer_minimalist_preferences"
+
+modal_geometry:
+  width_px: 520
+  height_px: 480
+  resizable: false
+  window_type: "NSWindowStyleMaskTitled | NSWindowStyleMaskClosable"
+  background_color: "synced with active theme background"
+  border: "1px solid rgba(255, 255, 255, 0.08)"
+
+sections:
+  - id: "appearance"
+    title: "Appearance & Themes"
+    components:
+      - type: "theme_swatch_selector"
+        id: "active_theme"
+        label: "Color Theme"
+        options:
+          - key: "obsidian_void"
+            label: "Obsidian"
+            preview_bg: "#080808"
+            preview_accent: "#3B82F6"
+          - key: "warm_parchment"
+            label: "Parchment"
+            preview_bg: "#FBF8F2"
+            preview_accent: "#D9532F"
+          - key: "slate_concrete"
+            label: "Slate"
+            preview_bg: "#1A1D20"
+            preview_accent: "#F97316"
+          - key: "midnight_indigo"
+            label: "Midnight"
+            preview_bg: "#0A0E17"
+            preview_accent: "#38BDF8"
+        default: "obsidian_void"
+
+  - id: "typography"
+    title: "Typography & Measure"
+    components:
+      - type: "font_family_dropdown"
+        id: "font_family"
+        label: "Typeface"
+        options:
+          - "Menlo"
+          - "Monaco"
+          - "SF Mono"
+          - "JetBrains Mono"
+          - "Courier New"
+        default: "Menlo"
+
+      - type: "slider_with_value"
+        id: "font_size"
+        label: "Font Size"
+        min: 13
+        max: 26
+        step: 1
+        unit: "pt"
+        default: 16
+
+      - type: "slider_with_value"
+        id: "column_width"
+        label: "Column Width"
+        min: 520
+        max: 960
+        step: 20
+        unit: "px"
+        default: 720
+
+  - id: "behavior"
+    title: "Writing Dynamics"
+    components:
+      - type: "toggle_switch"
+        id: "focus_mode_default"
+        label: "Focus Mode (Cmd+D)"
+        description: "Gently dim inactive paragraphs to isolate the current thought"
+        default: false
+
+      - type: "toggle_switch"
+        id: "typewriter_mode_default"
+        label: "Typewriter Scrolling (Cmd+T)"
+        description: "Keep the active typing line centered vertically on screen"
+        default: true
+
+      - type: "toggle_switch"
+        id: "transparent_markdown"
+        label: "In-Situ Markdown Styling"
+        description: "Format headings, quotes, and emphasis live without hiding syntax"
+        default: true
+
+      - type: "toggle_switch"
+        id: "show_status_hud"
+        label: "Bottom Statistics HUD"
+        description: "Display whisper-quiet word count and estimated reading time"
+        default: true
+
+  - id: "caret"
+    title: "Caret Personality"
+    components:
+      - type: "segmented_control"
+        id: "caret_width"
+        label: "Caret Width"
+        options: ["1px", "2px", "3px"]
+        default: "2px"
+
+      - type: "color_picker"
+        id: "caret_color"
+        label: "Custom Caret Accent"
+        sync_with_theme_option: true
+        default: "theme_default"
+</screen_data>
+
+## Role & Goal Definitions
+You are the **Lead C++ / Qt 6 Systems Engineer & Sovereign Interface Designer** for **Felt** — an unbloated, distraction-free markdown writing application.
+Your goal is to implement, refine, and verify the screen component described in `<screen_data>` according to the highest visual and architectural standards.
+
+## Execution Constraints
+- **Framework & Language**: Native C++17 with Qt 6.5.3 Widgets. No web wrappers, no Electron, no Tauri.
+- **Window Chrome**: Unified, frameless native chrome. On macOS, use native Cocoa window attributes (`NSWindowStyleMaskFullSizeContentView`, `titlebarAppearsTransparent`, seamless traffic lights) or platform-appropriate frameless handling so windows look integrated without an ugly default titlebar chrome, while retaining native window management on macOS, Linux, and Windows.
+- **Visual Aesthetic**:
+  - Distraction-free minimalism inspired by iA Writer, Ulysses, and typography-first tools.
+  - Centered measure column with optimal character measure (~65-72 characters).
+  - High-acuity typography with configurable monospaced / proportional fonts.
+- **Theme Substrate**: Must support dynamic theme switching across the 4 core palettes defined in the screen specification.
+- **William Zinsser Test Mandate**: All behavior must be accompanied by clutter-free, active-verb unit tests in muscular, clutter-free prose.
+
+## Required Output Format
+- Clean C++ header (`.h`) and implementation (`.cpp`) files adhering to Object Calisthenics (small methods, single responsibility, no deep nesting).
+- CMakeLists.txt updates if new files are introduced.
+- Deterministic test cases verifying state changes, geometry calculations, and mode toggles.
