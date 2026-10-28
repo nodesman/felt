@@ -28,9 +28,6 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
     void onCursorPositionChanged();
@@ -39,7 +36,6 @@ private slots:
 private:
     void updateMargins();
     void setupTypography();
-    void forwardMouseEventToViewport(QMouseEvent *event);
 
     FeltHighlighter *m_highlighter = nullptr;
     bool m_typewriterMode = true;

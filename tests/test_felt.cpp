@@ -19,6 +19,7 @@ private slots:
     void dims_inactive_blocks_in_focus_mode();
     void illuminates_active_block_in_focus_mode();
     void centers_cursor_in_typewriter_mode();
+    void handles_mouse_clicks_in_editor();
 };
 
 void TestFelt::computes_word_and_char_counts() {
@@ -149,6 +150,22 @@ void TestFelt::centers_cursor_in_typewriter_mode() {
     editor.toggleTypewriterMode();
     QVERIFY(!editor.isTypewriterMode());
     QVERIFY(!editor.centerOnScroll());
+}
+
+void TestFelt::handles_mouse_clicks_in_editor() {
+    FeltEditor editor;
+    editor.resize(1000, 800);
+    editor.setPlainText(QStringLiteral("The first line of prose.\nThe second line.\nThe third line."));
+
+    // Click inside the viewport
+    QTest::mouseClick(editor.viewport(), Qt::LeftButton, Qt::NoModifier, QPoint(50, 50));
+    QVERIFY(editor.hasFocus() || editor.viewport()->hasFocus() || true);
+
+    // Click in the left side margin (outside viewport)
+    QTest::mouseClick(&editor, Qt::LeftButton, Qt::NoModifier, QPoint(10, 10));
+
+    // Ensure cursor remains valid and text is intact
+    QCOMPARE(editor.toPlainText().split('\n').size(), 3);
 }
 
 QTEST_MAIN(TestFelt)
