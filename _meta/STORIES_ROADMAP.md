@@ -166,3 +166,14 @@
   - [ ] Fails build if any line exceeds 200 lines or contains an `else` keyword.
   - [ ] Returns exit code 0 only when all invariants and tests pass.
 
+### Story 12: Zinsser BDD Harness (`describe`/`it`), 100% Branch Coverage & Object Calisthenics Cage
+- **Plane Identifier**: `[FELT-TEST-1]` (Issue #17)
+- **Scope**:
+  - Build header-only C++17 Zinsser DSL (`tests/zinsser.h`, $< 100$ lines) providing `describe()` / `it()` BDD blocks with runtime enforcement of William Zinsser *On Writing Well* active-verb standards.
+  - Configure `-DENABLE_COVERAGE=ON` in CMake with Apple Clang `-fprofile-instr-generate -fcoverage-mapping`.
+  - Wire `xcrun llvm-cov` and `xcrun llvm-profdata` into `task coverage` enforcing 100% branch and line coverage on core modules.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] `task test` displays hierarchical, clutter-free Zinsser prose output.
+  - [ ] `task coverage` mathematically proves 100% branch coverage across all domain modules.
+  - [ ] `task gate` returns exit code 0 only when Calisthenics, Zinsser prose, and 100% branch coverage pass simultaneously.
+
