@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Felt — Distraction-Free Plain Text Writer</title>
   <meta name="description" content="A featherweight, distraction-free markdown writing instrument. The unbloated replacement for iA Writer. A quiet place to type what you feel.">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -45,6 +46,22 @@
       text-align: center;
       max-width: 680px;
       margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app-icon-wrapper {
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+
+    .app-icon {
+      width: 104px;
+      height: 104px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      display: block;
     }
 
     .badge {
@@ -143,6 +160,9 @@
 <body>
 
   <header>
+    <div class="app-icon-wrapper">
+      <img src="assets/icon.png" alt="Felt App Icon" class="app-icon" width="104" height="104" />
+    </div>
     <div class="badge">Sovereign Writing Instrument</div>
     <h1>felt</h1>
     <p class="subtitle">A featherweight, distraction-free markdown canvas.<br>A quiet place to type what you feel.</p>
