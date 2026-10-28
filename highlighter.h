@@ -1,5 +1,6 @@
 #pragma once
 
+#include "theme.h"
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QRegularExpression>
@@ -11,13 +12,15 @@ class FeltHighlighter : public QSyntaxHighlighter {
 public:
     explicit FeltHighlighter(QTextDocument *parent = nullptr);
 
+    void setTheme(const ThemePalette &palette);
+    ThemePalette theme() const;
+
     void setFocusMode(bool enabled);
     bool isFocusMode() const;
 
     void setCurrentBlockNumber(int blockNumber);
     int currentBlockNumber() const;
 
-    // Format getters for verification & testing
     QTextCharFormat normalFormat() const { return m_normalFormat; }
     QTextCharFormat dimmedFormat() const { return m_dimmedFormat; }
     QTextCharFormat header1Format() const { return m_header1Format; }
@@ -42,6 +45,7 @@ private:
     void initializeFormats();
     void buildRules();
 
+    ThemePalette m_palette;
     bool m_focusMode = false;
     int m_currentBlockNumber = 0;
 

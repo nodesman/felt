@@ -18,23 +18,15 @@ DocumentStats DocumentStats::compute(const QString &text) {
     }
     stats.charNoSpacesCount = nonSpaces;
 
-    // Word count via regex splitting on whitespace
-    static const QRegularExpression wordRegex(QStringLiteral("\\s+"));
     const QString trimmed = text.trimmed();
-    if (!trimmed.isEmpty()) {
-        const QStringList tokens = trimmed.split(wordRegex, Qt::SkipEmptyParts);
-        stats.wordCount = tokens.size();
-    } else {
-        stats.wordCount = 0;
+    if (trimmed.isEmpty()) {
+        return stats;
     }
 
-    // Standard reading speed: 200 words per minute
-    if (stats.wordCount > 0) {
-        stats.readingTimeMinutes = std::max(1, (stats.wordCount + 150) / 200);
-    } else {
-        stats.readingTimeMinutes = 0;
-    }
-
+    static const QRegularExpression wordRegex(QStringLiteral("\\s+"));
+    const QStringList tokens = trimmed.split(wordRegex, Qt::SkipEmptyParts);
+    stats.wordCount = tokens.size();
+    stats.readingTimeMinutes = std::max(1, (stats.wordCount + 150) / 200);
     return stats;
 }
 
@@ -49,15 +41,14 @@ QString DocumentStats::formatReadingTime(int minutes) {
 }
 
 QString DocumentStats::formatSummary(const DocumentStats &stats) {
-    if (stats.wordCount == 0) {
+    if (stats.wordCount <= 0) {
         return QStringLiteral("0 words · 0 min read");
     }
-
-    const QString wordUnit = (stats.wordCount == 1) ? QStringLiteral("word") : QStringLiteral("words");
     const QString timeStr = formatReadingTime(stats.readingTimeMinutes);
-
-    return QString::asprintf("%d %s · %s",
+    if (stats.wordCount == 1) {
+        return QString::asprintf("1 word · %s", timeStr.toUtf8().constData());
+    }
+    return QString::asprintf("%d words · %s",
                             stats.wordCount,
-                            wordUnit.toUtf8().constData(),
                             timeStr.toUtf8().constData());
 }

@@ -4,6 +4,8 @@ project(Felt VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(ENABLE_COVERAGE "Enable LLVM source-based code coverage instrumentation" ON)
+
 # Configure Qt 6.5.3 path
 set(CMAKE_PREFIX_PATH "/Users/rajsekharan/Qt/6.5.3/macos")
 
@@ -13,9 +15,17 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
 
-set(FELT_CORE_SOURCES
+set(FELT_DOMAIN_SOURCES
+    theme.h
+    theme.cpp
+    themeregistry.h
+    themeregistry.cpp
     stats.h
     stats.cpp
+)
+
+set(FELT_CORE_SOURCES
+    ${FELT_DOMAIN_SOURCES}
     highlighter.h
     highlighter.cpp
     editor.h
@@ -51,9 +61,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 
 # Unit test binary
 add_executable(test_felt
+    tests/zinsser.h
     tests/test_felt.cpp
-    stats.h
-    stats.cpp
+    ${FELT_DOMAIN_SOURCES}
     highlighter.h
     highlighter.cpp
     editor.h
@@ -61,5 +71,11 @@ add_executable(test_felt
 )
 target_link_libraries(test_felt PRIVATE Qt6::Widgets Qt6::Test)
 
+if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(test_felt PRIVATE -fprofile-instr-generate -fcoverage-mapping -O0 -g)
+    target_link_options(test_felt PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+endif()
+
 enable_testing()
 add_test(NAME test_felt COMMAND test_felt)
+set_tests_properties(test_felt PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")

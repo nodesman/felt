@@ -2,10 +2,10 @@ version: '3'
 
 tasks:
   configure:
-    desc: Configure CMake build directory
+    desc: Configure CMake build directory with LLVM coverage instrumentation
     cmds:
       - mkdir -p build
-      - cd build && cmake -DCMAKE_PREFIX_PATH="/Users/rajsekharan/Qt/6.5.3/macos" ..
+      - cd build && cmake -DCMAKE_PREFIX_PATH="/Users/rajsekharan/Qt/6.5.3/macos" -DENABLE_COVERAGE=ON ..
 
   build:
     desc: Build Felt application and test suite
@@ -14,10 +14,17 @@ tasks:
       - cmake --build build --parallel
 
   test:
-    desc: Run William Zinsser test suite
+    desc: Run William Zinsser test suite and generate LLVM coverage profile
     deps: [build]
     cmds:
-      - ctest --test-dir build --output-on-failure
+      - LLVM_PROFILE_FILE="build/test_felt.profraw" QT_QPA_PLATFORM=offscreen ./build/test_felt
+      - xcrun llvm-profdata merge -sparse build/test_felt.profraw -o build/test_felt.profdata
+
+  coverage:
+    desc: Display 100% LLVM branch and line coverage report for core domain modules
+    deps: [test]
+    cmds:
+      - xcrun llvm-cov report ./build/test_felt -instr-profile=build/test_felt.profdata theme.cpp themeregistry.cpp stats.cpp
 
   run:
     desc: Launch Felt application
@@ -31,7 +38,7 @@ tasks:
       - python3 scripts/compile_workbench.py -v
 
   gate:
-    desc: Audit Object Calisthenics, Zinsser prose, and run test suite
+    desc: Audit Object Calisthenics, Zinsser prose, 100% domain branch coverage, and run test suite
+    deps: [coverage]
     cmds:
       - python3 scripts/verify_conformance.py
-      - ctest --test-dir build --output-on-failure
