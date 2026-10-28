@@ -22,6 +22,8 @@ set(FELT_DOMAIN_SOURCES
     themeregistry.cpp
     stats.h
     stats.cpp
+    measure.h
+    measure.cpp
 )
 
 set(FELT_CORE_SOURCES
@@ -30,6 +32,10 @@ set(FELT_CORE_SOURCES
     highlighter.cpp
     editor.h
     editor.cpp
+    documenthud.h
+    documenthud.cpp
+    menubuilder.h
+    menubuilder.cpp
     mainwindow.h
     mainwindow.cpp
 )
@@ -63,11 +69,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 add_executable(test_felt
     tests/zinsser.h
     tests/test_felt.cpp
-    ${FELT_DOMAIN_SOURCES}
-    highlighter.h
-    highlighter.cpp
-    editor.h
-    editor.cpp
+    tests/test_core_architecture.cpp
+    ${FELT_CORE_SOURCES}
 )
 target_link_libraries(test_felt PRIVATE Qt6::Widgets Qt6::Test)
 

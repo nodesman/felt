@@ -8,6 +8,8 @@
 #include <QTextBlock>
 #include <QTextLayout>
 
+void runCoreArchitectureSuites();
+
 class TestFelt : public QObject {
     Q_OBJECT
 
@@ -15,6 +17,7 @@ private slots:
     void verifies_theme_registry_and_contrast_invariants();
     void verifies_document_stats_and_hud_formatting();
     void verifies_highlighter_and_focus_mode_invariants();
+    void verifies_core_architecture_and_measure() { runCoreArchitectureSuites(); }
 };
 
 void TestFelt::verifies_theme_registry_and_contrast_invariants() {
@@ -127,15 +130,12 @@ void TestFelt::verifies_highlighter_and_focus_mode_invariants() {
             doc.setPlainText(QStringLiteral("# Chapter One\n> Quiet monologue\nThis is **bold** and *italic* text."));
             FeltHighlighter highlighter(&doc);
             highlighter.rehighlight();
-
             const auto h1Formats = doc.findBlockByNumber(0).layout()->formats();
             QVERIFY(!h1Formats.isEmpty());
             QCOMPARE(h1Formats.last().format.fontWeight(), QFont::Bold);
-
             const auto quoteFormats = doc.findBlockByNumber(1).layout()->formats();
             QVERIFY(!quoteFormats.isEmpty());
             QVERIFY(quoteFormats.last().format.fontItalic());
-
             const auto inlineFormats = doc.findBlockByNumber(2).layout()->formats();
             QVERIFY(inlineFormats.size() >= 2);
         });

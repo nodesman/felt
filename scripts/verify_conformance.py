@@ -60,9 +60,10 @@ def check_file_lengths(files):
 def check_no_else(files):
     violations = []
     else_re = re.compile(r"\belse\b")
+    string_re = re.compile(r'"(?:\\.|[^"\\])*"')
     for p in files:
         for idx, line in enumerate(p.read_text(encoding="utf-8").splitlines(), start=1):
-            stripped = line.split("//")[0]
+            stripped = string_re.sub('""', line.split("//")[0])
             if else_re.search(stripped):
                 violations.append((p.relative_to(ROOT_DIR), idx, line.strip()))
     return violations

@@ -1,13 +1,22 @@
 #pragma once
 
 #include <QPlainTextEdit>
+#include <QStringList>
 #include "highlighter.h"
+#include "measure.h"
+#include "theme.h"
 
 class FeltEditor : public QPlainTextEdit {
     Q_OBJECT
 
 public:
     explicit FeltEditor(QWidget *parent = nullptr);
+
+    void applyTheme(const ThemePalette &palette);
+    ThemePalette currentTheme() const;
+
+    void setColumnWidth(int width);
+    int maxColumnWidth() const { return m_measure.columnWidth(); }
 
     void setFocusMode(bool enabled);
     bool isFocusMode() const;
@@ -18,7 +27,10 @@ public:
     void toggleTypewriterMode();
 
     FeltHighlighter* highlighter() const { return m_highlighter; }
-    int maxColumnWidth() const { return m_maxColumnWidth; }
+
+    static QFont resolveMonospaceFont(const QStringList &installedFamilies,
+                                      const QStringList &priorityOrder,
+                                      int pointSize = 16);
 
 signals:
     void statsChanged();
@@ -38,6 +50,6 @@ private:
     void setupTypography();
 
     FeltHighlighter *m_highlighter = nullptr;
+    DocumentMeasure m_measure;
     bool m_typewriterMode = true;
-    int m_maxColumnWidth = 720;
 };
