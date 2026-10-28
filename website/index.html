@@ -148,6 +148,98 @@
       line-height: 1.6;
     }
 
+    .gallery-section {
+      max-width: 1100px;
+      width: 100%;
+      margin-bottom: 80px;
+    }
+
+    .gallery-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .gallery-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 300;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .gallery-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gallery-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-3px);
+      border-color: #333333;
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+
+    .gallery-info {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .gallery-theme-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      width: fit-content;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tag-obsidian { color: #60a5fa; background: rgba(59, 130, 246, 0.12); }
+    .tag-parchment { color: #f97316; background: rgba(217, 83, 47, 0.12); }
+    .tag-midnight { color: #38bdf8; background: rgba(56, 189, 248, 0.12); }
+    .tag-settings { color: #a78bfa; background: rgba(167, 139, 250, 0.12); }
+
+    .gallery-caption {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
     footer {
       text-align: center;
       font-family: var(--font-mono);
@@ -184,6 +276,43 @@
     <div class="feature-card">
       <div class="feature-title">Native & Unbloated</div>
       <div class="feature-desc">Built in native C++ and Qt 6. Instant launch, raw local .md file sovereignty, zero subscriptions, zero proprietary lock-in.</div>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery-header">
+      <h2>Native Frameless Canvas &amp; Dynamic Themes</h2>
+      <p>Seamlessly integrated with macOS full-size content view, zero titlebar bloat, and refined typography atmospheres.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-card">
+        <img src="assets/mockups/editor_obsidian_void.jpg" alt="Felt in Obsidian Void theme" class="gallery-img" />
+        <div class="gallery-info">
+          <span class="gallery-theme-tag tag-obsidian">Obsidian Void</span>
+          <span class="gallery-caption">Bone-white text on pure matte black canvas with an electric cyan-blue caret.</span>
+        </div>
+      </div>
+      <div class="gallery-card">
+        <img src="assets/mockups/editor_warm_parchment.jpg" alt="Felt in Warm Parchment theme" class="gallery-img" />
+        <div class="gallery-info">
+          <span class="gallery-theme-tag tag-parchment">Warm Parchment</span>
+          <span class="gallery-caption">Espresso sepia ink on tactile editorial paper with a terracotta red caret.</span>
+        </div>
+      </div>
+      <div class="gallery-card">
+        <img src="assets/mockups/editor_midnight_indigo.jpg" alt="Felt in Midnight Indigo theme" class="gallery-img" />
+        <div class="gallery-info">
+          <span class="gallery-theme-tag tag-midnight">Midnight Indigo</span>
+          <span class="gallery-caption">Starlight silver typography on deep oceanic navy with a luminous sky caret.</span>
+        </div>
+      </div>
+      <div class="gallery-card">
+        <img src="assets/mockups/preferences_settings_modal.jpg" alt="Felt Preferences Panel" class="gallery-img" />
+        <div class="gallery-info">
+          <span class="gallery-theme-tag tag-settings">Minimal Preferences</span>
+          <span class="gallery-caption">iA Writer-style floating sheet: theme swatches, typography sliders, and dynamics.</span>
+        </div>
+      </div>
     </div>
   </section>
 
