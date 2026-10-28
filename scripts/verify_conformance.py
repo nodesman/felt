@@ -18,6 +18,13 @@ BANNED_TEST_WORDS = [
     "should", "properly", "correctly", "successfully", "works_as_expected"
 ]
 
+BANNED_TAUTOLOGIES = [
+    r"\|\|\s*true\b",
+    r"true\s*\|\|",
+    r"QVERIFY\(\s*true\s*\)",
+    r"expect\(\s*true\s*\)\.toBe\(\s*true\s*\)",
+]
+
 def check_file_lengths():
     violations = []
     cpp_files = list(ROOT_DIR.glob("*.h")) + list(ROOT_DIR.glob("*.cpp"))
@@ -46,14 +53,17 @@ def check_no_else():
 
 def check_zinsser_tests():
     violations = []
-    test_files = list((ROOT_DIR / "tests").glob("*.cpp"))
+    test_files = list((ROOT_DIR / "tests").glob("*.cpp")) + list((ROOT_DIR / "tests").glob("*.h"))
     for p in test_files:
         with open(p, "r", encoding="utf-8") as f:
             for idx, line in enumerate(f, 1):
                 lower = line.lower()
                 for banned in BANNED_TEST_WORDS:
                     if banned in lower:
-                        violations.append((p.name, idx, banned, line.strip()))
+                        violations.append((p.name, idx, f"bureaucratic word '{banned}'", line.strip()))
+                for pattern in BANNED_TAUTOLOGIES:
+                    if re.search(pattern, line):
+                        violations.append((p.name, idx, f"tautological assertion '{pattern}'", line.strip()))
     return violations
 
 def main():
