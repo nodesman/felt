@@ -88,3 +88,81 @@
   - [ ] Zero bureaucratic filler words in test names (`should`, `properly`, `works as expected`).
   - [ ] 100% tests passing on automated runner.
   - [ ] Zero memory leaks or dangling QObject pointers.
+
+---
+
+## Epic 2: Compiler-Grade Lexical Grammar & In-Situ Conformance
+- **Plane Module**: `Compiler-Grade Lexical Grammar & In-Situ Conformance`
+- **Objective**: Create a deterministic, compiler-grade lexical test matrix verifying all markdown grammar productions, boundary conditions, and negative syntax cases.
+
+### Story 6: Markdown Grammar Lexer & Invariant Rules
+- **Plane Identifier**: `[FELT-LEX-1]`
+- **Scope**:
+  - Extract pure markdown matching rules from `highlighter.cpp` into `grammar.h` and `grammar.cpp` (< 90 lines).
+  - Implement zero-allocation token scanning using `QStringView`.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Zero Qt GUI dependencies in `grammar.h/cpp` (pure string/token logic).
+  - [ ] Rejects invalid markdown gracefully (e.g. `#nospace`, `**unclosed`).
+  - [ ] File length strictly $\le 100$ lines.
+
+### Story 7: Clutter-Free Grammar Conformance Test Suite
+- **Plane Identifier**: `[FELT-LEX-2]`
+- **Scope**:
+  - Create `tests/test_grammar_conformance.cpp` testing H1–H6, blockquotes, symmetric delimiters, and scene breaks.
+  - Use active-verb William Zinsser declarations.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Active verb test cases: `rejects_unspaced_heading_marker()`, `parses_nested_blockquote()`, `traps_unbalanced_asterisks()`.
+  - [ ] 100% test pass rate via `ctest`.
+
+---
+
+## Epic 3: Object Calisthenics Core & Architectural Conformance
+- **Plane Module**: `Object Calisthenics Core & Architectural Conformance`
+- **Objective**: Refactor all Felt components into small, single-responsibility entities $\le 200$ lines, 1 level of indentation, zero `else` keywords, and tiny value objects.
+
+### Story 8: Immutable `ThemePalette` & `ThemeRegistry` Value Objects
+- **Plane Identifier**: `[FELT-CORE-1]`
+- **Scope**:
+  - Create `theme.h/cpp` and `themeregistry.h/cpp` ($\le 100$ lines, zero `else`, value objects for colors).
+  - Enforce WCAG AAA contrast ratio ($\ge 7:1$) on all 4 palettes.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Value objects immutable after construction.
+  - [ ] Automated test asserts contrast ratio $\ge 7:1$ for all 4 themes.
+
+### Story 9: Decouple Document Measure Calculus into Tiny Value Object
+- **Plane Identifier**: `[FELT-CORE-2]`
+- **Scope**:
+  - Create `measure.h/cpp` calculating dynamic margins, line widths, and clamping.
+  - Implement with 1 level of indentation and zero `else`.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Pure mathematical value object with zero Qt widget coupling.
+  - [ ] 100% line & branch coverage via unit tests.
+
+### Story 10: Extract `DocumentHUD` and `MenuBuilder` from MainWindow
+- **Plane Identifier**: `[FELT-CORE-3]`
+- **Scope**:
+  - Shrink `mainwindow.cpp` from 279 lines down to $< 140$ lines.
+  - Delegate HUD to `documenthud.h/cpp` and menu bar to `menubuilder.h/cpp`.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Every single C++ file in the repository strictly $\le 200$ lines.
+  - [ ] Clean separation of concerns with zero logic duplication.
+
+---
+
+## Epic 4: The Sovereign Verification Gate (100% Conformance)
+- **Plane Module**: `The Sovereign Verification Gate (100% Conformance)`
+- **Objective**: Automated gate script auditing code metrics, Object Calisthenics, and test pass rate before declaring any milestone complete.
+
+### Story 11: Automated Calisthenics & Verification Gate Script
+- **Plane Identifier**: `[FELT-GATE-1]`
+- **Scope**:
+  - Implement `scripts/verify_conformance.py` verifying:
+    1. Line counts ($\le 200$ lines per file).
+    2. Zero `else` keywords.
+    3. Indentation depth ($\le 1$ level per method).
+    4. 100% CTest pass rate.
+  - Wire to `task gate` in `Taskfile.yml`.
+- **The Brake Check (Quality Vectors)**:
+  - [ ] Fails build if any line exceeds 200 lines or contains an `else` keyword.
+  - [ ] Returns exit code 0 only when all invariants and tests pass.
+
