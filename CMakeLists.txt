@@ -30,7 +30,12 @@ if(APPLE)
     set_source_files_properties(${FELT_ICON_RESOURCE} PROPERTIES
         MACOSX_PACKAGE_LOCATION "Resources"
     )
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp ${FELT_CORE_SOURCES} ${FELT_ICON_RESOURCE})
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+        main.cpp
+        ${FELT_CORE_SOURCES}
+        ${FELT_ICON_RESOURCE}
+        resources/felt.qrc
+    )
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_BUNDLE_NAME "Felt"
         MACOSX_BUNDLE_GUI_IDENTIFIER "com.nodesman.felt"
@@ -39,7 +44,7 @@ if(APPLE)
         MACOSX_BUNDLE_ICON_FILE "Felt.icns"
     )
 else()
-    add_executable(${PROJECT_NAME} main.cpp ${FELT_CORE_SOURCES})
+    add_executable(${PROJECT_NAME} main.cpp ${FELT_CORE_SOURCES} resources/felt.qrc)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)

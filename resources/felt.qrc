@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="icon.png">../website/assets/icon.png</file>
+        <file alias="Felt.icns">Felt.icns</file>
+    </qresource>
+</RCC>
